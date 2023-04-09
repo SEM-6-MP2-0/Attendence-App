@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'Pages/attendance.dart';
 import 'Pages/home.dart';
+import 'Pages/stats.dart';
 import 'Styles/colors.dart';
 import 'Styles/textstyles.dart';
 
@@ -35,14 +37,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = [
     HomePage(),
-    Text(
-      'Index 1: Business',
-      style: CusTextStyle.big,
-    ),
-    Text(
-      'Index 2: Stats',
-      style: CusTextStyle.big,
-    ),
+    AttendancePage(),
+    StatsPage(),
     Text(
       'Index 3: More',
       style: CusTextStyle.big,
@@ -58,9 +54,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Attendance'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

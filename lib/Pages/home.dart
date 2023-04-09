@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../Styles/borderradius.dart';
 import '../Styles/colors.dart';
 import '../Styles/textstyles.dart';
+import 'takeAttendence.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -42,52 +43,66 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              formatteddate.split('\n')[0],
-              style: CusTextStyle.large,
-              textAlign: TextAlign.center,
+            Column(
+              children: [
+                Text(
+                  formatteddate.split('\n')[0],
+                  style: CusTextStyle.large,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  formatteddate.split('\n')[1],
+                  style: CusTextStyle.midL,
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            Text(
-              formatteddate.split('\n')[1],
-              style: CusTextStyle.midL,
-              textAlign: TextAlign.center,
+            ClipRRect(
+              borderRadius: CusBorderRadius.mid,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TakeAttendence(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: CusColors.grey.withOpacity(0.6),
+                    border: Border.all(color: CusColors.grey),
+                    borderRadius: CusBorderRadius.mid,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "On",
+                    style: GoogleFonts.inter(
+                      fontSize: 45,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
             ),
           ],
         ),
-        ClipRRect(
-          borderRadius: CusBorderRadius.mid,
-          child: TextButton(
-            onPressed: () {},
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                color: CusColors.grey.withOpacity(0.6),
-                border: Border.all(color: CusColors.grey),
-                borderRadius: CusBorderRadius.mid,
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                "On",
-                style: GoogleFonts.inter(
-                  fontSize: 45,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-      ],
+      ),
     );
   }
 }
