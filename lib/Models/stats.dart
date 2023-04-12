@@ -1,9 +1,12 @@
 class StatsModel{
   String date;
-  Map<String, bool> attendance;
+  List<String> present;
+  List<String> absent;
+
 
   StatsModel({
     required this.date,
-    required this.attendance,
+    required this.present,
+    required this.absent,
   });
 }

@@ -45,68 +45,85 @@ class StatsTile extends StatelessWidget {
               child: Center(child: Text(stat.date)),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: buildCourseList(),
-                ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Present: ",
+                          style: TextStyle(
+                              color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 8.0,
+                            children: stat.present.map((e) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.green.withOpacity(0.6),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  e,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Absent: ",
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 8.0,
+                            children: stat.absent.map((e) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.red.withOpacity(0.6),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  e,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  List<Widget> buildCourseList() {
-    final List<Widget> courseWidgets = [];
-
-    List<String> keysWithTrueValues = [];
-    List<String> keysWithFalseValues = [];
-
-    stat.attendance.forEach((key, value) {
-      if (value) {
-        keysWithTrueValues.add(key);
-      } else {
-        keysWithFalseValues.add(key);
-      }
-    });
-
-    final List<String> finalKeysList = [
-      ...keysWithTrueValues,
-      ...keysWithFalseValues
-    ];
-
-    finalKeysList.forEach((subject) {
-      final bool isPresent = stat.attendance[subject]!;
-      final courseName = subject;
-      final textWidget = Text(
-        "$courseName : ",
-        style: TextStyle(fontWeight: FontWeight.w700),
-      );
-      final boolWidget = Text(
-        isPresent ? "Present" : "Absent",
-        style: TextStyle(
-          color: isPresent ? Colors.green : Colors.red,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-
-      courseWidgets.add(
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            textWidget,
-            boolWidget,
-          ],
-        ),
-      );
-    });
-
-    stat.attendance.forEach((courseName, isPresent) {});
-
-    return courseWidgets;
   }
 }
