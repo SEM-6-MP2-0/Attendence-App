@@ -14,4 +14,23 @@ class AttendanceModel{
   changeStatus(){
     isPresent = !isPresent;
   }
+
+  factory AttendanceModel.fromJson(Map<String, dynamic> json) {
+    return AttendanceModel(
+      name: json['name'],
+      prn: json['prn'],
+      url: json['url'],
+      isPresent: false,
+    );
+  }
+
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'prn': prn,
+      'url': url,
+      'isPresent': isPresent,
+    };
+  }
 }
