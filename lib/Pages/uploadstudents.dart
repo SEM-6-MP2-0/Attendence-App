@@ -13,13 +13,34 @@ class UploadStudents extends StatefulWidget {
 }
 
 class _UploadStudentsState extends State<UploadStudents> {
-  final department = [
-    "Information Technology",
-    "Computer Science",
-    "Electronics and Telecommunication",
-    "Mechanical",
-    "Civil",
-    "Electrical"
+  final List<Map<String, String>> department = [
+    {
+      "IT": "Information Technology",
+    },
+    {
+      "CE": "Computer Engineering",
+    },
+    {
+      "EXTC": "Electronics and Telecommunication",
+    },
+    {
+      "Mech": "Mechanical Engineering",
+    },
+    {
+      "PPT": "Printing and Packaging Technology",
+    },
+    {
+      "ECS": "Electronics and Computer Science",
+    },
+    {
+      "AIML": "Artificial Intelligence and Machine Learning",
+    },
+    {
+      "AIDS": "Artificial Intelligence and Data Science",
+    },
+    {
+      "IOT": "Internet of Things",
+    }
   ];
   PlatformFile? selectedFile;
   final yearController = TextEditingController();
@@ -27,7 +48,7 @@ class _UploadStudentsState extends State<UploadStudents> {
 
   @override
   void initState() {
-    depController = department[0];
+    depController = department[0].keys.first;
     super.initState();
   }
 
@@ -58,24 +79,30 @@ class _UploadStudentsState extends State<UploadStudents> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     selectedItemBuilder: (context) {
-                      return department.map((String value) {
-                        return Center(
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      return department.map((e) {
+                        return Text(
+                          e.values.first,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         );
                       }).toList();
                     },
                     borderRadius: BorderRadius.circular(10),
                     value: depController,
-                    items: department.map((String value) {
+                    items: department.map((e) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+                        value: e.keys.first,
+                        child: Text(
+                          e.values.first,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       );
                     }).toList(),
                     onChanged: (String? cur) {

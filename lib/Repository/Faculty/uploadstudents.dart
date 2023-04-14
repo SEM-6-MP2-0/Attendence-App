@@ -27,7 +27,7 @@ Future<bool> uploadStudents(
           "vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
       filename: originalName);
   req.files.add(file);
-  req.fields.addAll({"joinyear": year,"department":department});
+  req.fields.addAll({"joinyear": year, "department": department});
   req.headers.addAll({
     'authorization': token,
     "Content-Type": "multipart/form-data",
@@ -35,7 +35,6 @@ Future<bool> uploadStudents(
   });
 
   var res = await req.send();
-
   if (res.statusCode == 200) {
     // Fluttertoast.showToast(
     //   msg: "Roll List Uploaded Successfully",
