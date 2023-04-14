@@ -29,7 +29,7 @@ Future<bool> uploadStudents(
   req.files.add(file);
   req.fields.addAll({"joinyear": year,"department":department});
   req.headers.addAll({
-    'Authorization': token,
+    'authorization': token,
     "Content-Type": "multipart/form-data",
     "Accept": "application/json",
   });

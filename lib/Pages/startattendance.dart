@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:attendenceapp/Pages/attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,6 @@ import 'package:intl/intl.dart';
 import '../Styles/borderradius.dart';
 import '../Styles/colors.dart';
 import '../Styles/textstyles.dart';
-import 'takeAttendence.dart';
 
 class StartAttendancePage extends StatefulWidget {
   const StartAttendancePage({Key? key}) : super(key: key);
@@ -24,6 +24,9 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
   @override
   void initState() {
     super.initState();
+    year = List.generate(4, (index) => (curYear + index));
+    _yearController = year[0];
+    _branchController = branches[0];
     formatteddate = DateFormat(_dateFormat).format(DateTime.now());
     timer = Timer.periodic(
       const Duration(seconds: 5),
@@ -41,6 +44,25 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
     super.dispose();
   }
 
+  final branches = const [
+    "CE",
+    "IT",
+    "EXTC",
+    "Mech",
+    "PPT",
+    "ECS",
+    "AIML",
+    "AIDS",
+    "IOT"
+  ];
+
+  final curYear = DateTime.now().year;
+
+  late List<int> year;
+
+  late String _branchController;
+  late int _yearController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +73,68 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    decoration: BoxDecoration(
+                      color: CusColors.yellowD,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        borderRadius: BorderRadius.circular(10),
+                        value: _branchController,
+                        items: branches.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? cur) {
+                          setState(() {
+                            _branchController = cur!;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    decoration: BoxDecoration(
+                      color: CusColors.yellowD,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<int>(
+                        borderRadius: BorderRadius.circular(10),
+                        value: _yearController,
+                        items: year.map((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text(value.toString()),
+                          );
+                        }).toList(),
+                        onChanged: (int? cur) {
+                          setState(() {
+                            _yearController = cur!;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 30,
+            ),
             Column(
               children: [
                 Text(
@@ -72,7 +156,10 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TakeAttendence(),
+                      builder: (context) => AttendancePage(
+                        dateOfLeaving: _yearController.toString(),
+                        department: _branchController,
+                      ),
                     ),
                   );
                 },
@@ -98,7 +185,7 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 80,
             ),
           ],
         ),

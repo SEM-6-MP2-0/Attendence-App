@@ -1,25 +1,67 @@
+import 'package:attendenceapp/Pages/Utils/saveattendancedialog.dart';
+import 'package:attendenceapp/Repository/Faculty/takeattendance.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/attendance.dart';
-import '../attendancelist.dart';
 
 class AttendancePage extends StatefulWidget {
-  const AttendancePage({super.key});
+  const AttendancePage(
+      {super.key, required this.dateOfLeaving, required this.department});
+  final String dateOfLeaving;
+  final String department;
 
   @override
   State<AttendancePage> createState() => _AttendancePageState();
 }
 
 class _AttendancePageState extends State<AttendancePage> {
+  late List<AttendanceModel> mapList;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      takeAttendance(widget.dateOfLeaving, widget.department).then((value) {
+        mapList = value;
+        isLoading = false;
+        setState(() {});
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Attendance")),
-      body: ListView.builder(
-        itemBuilder: (context, index) =>
-            AttendanceTile(idx: index, onTap: onTap),
-        itemCount: mapList.length,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if(!isLoading){
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return SaveAttendanceDialog(mapList: mapList,);
+                });
+          }
+          // Navigator.pop(context);
+        },
+        child: const Icon(Icons.done),
       ),
+      appBar: AppBar(title: const Text("Attendance")),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Scrollbar(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) => AttendanceTile(
+                      idx: index, onTap: onTap, tile: mapList[index]),
+                  itemCount: mapList.length,
+                ),
+              ),
+            ),
     );
   }
 
@@ -31,14 +73,16 @@ class _AttendancePageState extends State<AttendancePage> {
 }
 
 class AttendanceTile extends StatelessWidget {
-  const AttendanceTile({super.key, required this.idx, required this.onTap});
+  const AttendanceTile(
+      {super.key, required this.idx, required this.onTap, required this.tile});
 
   final int idx;
+  final AttendanceModel tile;
   final Function(int idx) onTap;
 
   @override
   Widget build(BuildContext context) {
-    AttendanceModel student = mapList[idx];
+    AttendanceModel student = tile;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -52,9 +96,15 @@ class AttendanceTile extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: Colors.grey,
-              // child: Image.network(student.url),
             ),
-            Text(student.name),
+            Expanded(
+              child: Center(
+                child: Text(
+                  student.name,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
             ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(

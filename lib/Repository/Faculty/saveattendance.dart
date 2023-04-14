@@ -17,12 +17,12 @@ Future<bool> saveAttendance(
   final response = await http.post(
     url,
     headers: {
-      "Authentication": token,
+      "authorization": token,
     },
     body: {
       "subject": subject,
       "semester": semester,
-      "attendance": attendance.map((e) => e.toJson()).toList().toString()
+      "attendance": attendance.map((e) => e.toJson()).toList().toString(),
     },
   );
   if (response.statusCode == 200) {
