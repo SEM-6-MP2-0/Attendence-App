@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:attendenceapp/Styles/url.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -22,7 +24,7 @@ Future<bool> saveAttendance(
     body: {
       "subject": subject,
       "semester": semester,
-      "attendance": attendance.map((e) => e.toJson()).toList().toString(),
+      "attendance": json.encode(attendance.map((e) => e.toJson()).toList()),
     },
   );
   if (response.statusCode == 200) {
