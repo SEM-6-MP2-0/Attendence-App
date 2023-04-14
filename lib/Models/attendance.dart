@@ -1,17 +1,19 @@
-class AttendanceModel{
+class AttendanceModel {
+  final String studentId;
+  final String date;
   final String name;
-  final String prn;
-  final String url;
   bool isPresent;
+  final String prn;
 
-  AttendanceModel( {
+  AttendanceModel({
     required this.isPresent,
     required this.name,
     required this.prn,
-    required this.url,
+    required this.date,
+    required this.studentId,
   });
 
-  changeStatus(){
+  changeStatus() {
     isPresent = !isPresent;
   }
 
@@ -19,17 +21,18 @@ class AttendanceModel{
     return AttendanceModel(
       name: json['name'],
       prn: json['prn'],
-      url: json['url'],
-      isPresent: false,
+      date: json['date'],
+      studentId: json['student'],
+      isPresent: json['isPresent'],
     );
   }
-
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'prn': prn,
-      'url': url,
+      'date': date,
+      'student': studentId,
       'isPresent': isPresent,
     };
   }
