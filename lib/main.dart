@@ -1,3 +1,4 @@
+import 'package:attendenceapp/Pages/login.dart';
 import 'package:flutter/material.dart';
 
 import 'Pages/attendance.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainPage(),
+      home: const LoginPage(),
     );
   }
 }

@@ -17,7 +17,8 @@ Future<bool> login(String email, String password) async {
   if (response.statusCode == 200) {
     const storage = FlutterSecureStorage();
     final res = jsonDecode(response.body);
-    await storage.write(key: "token", value: res["token"]);
+    print(res);
+    await storage.write(key: "token", value: res["token"]["token"]);
     return true;
   } else {
     print(response.statusCode);
