@@ -1,9 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:attendenceapp/Pages/Utils/loading.dart';
+import 'package:attendenceapp/Pages/home.dart';
 import 'package:attendenceapp/Repository/Auth/login.dart';
 import 'package:attendenceapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
+import '../Provider/user.dart';
 import '../Styles/colors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -30,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(title: const Text("Login")),
       body: Column(
         children: [
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           InputField(
             controller: emailController,
             icon: Icon(
@@ -39,9 +44,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             text: "Email",
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           PasswordInputField(controller: passwordController),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           ElevatedButton(
             onPressed: () async {
               showDialog(
@@ -51,12 +56,13 @@ class _LoginPageState extends State<LoginPage> {
                   return const LoadingDialog();
                 },
               );
-              bool res =
+              final res =
                   await login(emailController.text, passwordController.text);
               Navigator.pop(context);
-              if (res) {
+              if (res != null) {
+                Provider.of<UserProvider>(context, listen: false).setUser(res);
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => MainPage()));
+                    context, MaterialPageRoute(builder: (_) => const HomePage()));
               } else {
                 Fluttertoast.showToast(msg: "Login Failed");
               }

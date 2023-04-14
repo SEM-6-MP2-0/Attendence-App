@@ -1,107 +1,100 @@
-import 'dart:async';
-
+import 'package:attendenceapp/Pages/startattendance.dart';
+import 'package:attendenceapp/Pages/stats.dart';
+import 'package:attendenceapp/Pages/uploadstudents.dart';
+import 'package:attendenceapp/Provider/user.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../Styles/borderradius.dart';
+import '../Enum/users.dart';
 import '../Styles/colors.dart';
 import '../Styles/textstyles.dart';
-import 'takeAttendence.dart';
+import 'attendance.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late final Timer timer;
-  late String formatteddate;
-  final String _dateFormat = 'hh:mm a \n EEE d MMM';
+  int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    formatteddate = DateFormat(_dateFormat).format(DateTime.now());
-    timer = Timer.periodic(
-      const Duration(seconds: 5),
-      (timer) {
-        setState(() {
-          formatteddate = DateFormat(_dateFormat).format(DateTime.now());
-        });
-      },
-    );
+  void _changePage(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
+  List<BottomNavigationBarItem> getNavItems(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+    switch (user) {
+      case Users.faculty:
+        return const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.upload_file),
+            label: 'Upload Students',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ];
+      case Users.student:
+        return const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.stacked_bar_chart_outlined),
+            label: 'Statistics',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ];
+    }
+  }
+
+  List<Widget> getNavPages(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+    switch (user) {
+      case Users.faculty:
+        return const <Widget>[
+          StartAttendancePage(),
+          UploadStudents(),
+          Text(
+            'Profile',
+            style: CusTextStyle.big,
+          ),
+        ];
+      case Users.student:
+        return const <Widget>[
+          StatsPage(),
+          Text(
+            'Profile',
+            style: CusTextStyle.big,
+          ),
+        ];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                Text(
-                  formatteddate.split('\n')[0],
-                  style: CusTextStyle.large,
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  formatteddate.split('\n')[1],
-                  style: CusTextStyle.midL,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            ClipRRect(
-              borderRadius: CusBorderRadius.mid,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const TakeAttendence(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: CusColors.grey.withOpacity(0.6),
-                    border: Border.all(color: CusColors.grey),
-                    borderRadius: CusBorderRadius.mid,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "On",
-                    style: GoogleFonts.inter(
-                      fontSize: 45,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
-        ),
+        child: getNavPages(context).elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: getNavItems(context),
+        currentIndex: _selectedIndex,
+        backgroundColor: Colors.white,
+        selectedItemColor: CusColors.yellowD,
+        unselectedItemColor: CusColors.black,
+        showUnselectedLabels: false,
+        onTap: _changePage,
       ),
     );
   }
