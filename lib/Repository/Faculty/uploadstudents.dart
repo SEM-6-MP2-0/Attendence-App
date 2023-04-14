@@ -10,24 +10,16 @@ import '../../Styles/url.dart';
 
 Future<bool> uploadStudents(
     String filepath, String filetype, String year, String department) async {
-  // const storage = FlutterSecureStorage();
-  // final token = await storage.read(key: "token");
-  // if (token == null) {
-  //   Fluttertoast.showToast(
-  //     msg: "Error in adding roll list",
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     timeInSecForIosWeb: 1,
-  //     backgroundColor: Colors.red,
-  //     textColor: Colors.white,
-  //     fontSize: 16.0,
-  //   );
-  //   return;
-  // }
   final req = http.MultipartRequest(
     'POST',
     Uri.parse("$serverURL/faculty/insertrolllist"),
   );
+  const storage = FlutterSecureStorage();
+  final token = await storage.read(key: "token");
+  if (token == null) {
+    print("Token not found");
+    return false;
+  }
   final originalName = filepath.split('/').last;
   final file = http.MultipartFile.fromBytes(
       "Rollfile", await File.fromUri(Uri.parse(filepath)).readAsBytes(),
@@ -37,7 +29,7 @@ Future<bool> uploadStudents(
   req.files.add(file);
   req.fields.addAll({"joinyear": year,"department":department});
   req.headers.addAll({
-    'Authorization': "token",
+    'Authorization': token,
     "Content-Type": "multipart/form-data",
     "Accept": "application/json",
   });

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:attendenceapp/Styles/url.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -12,7 +15,9 @@ Future<bool> login(String email, String password) async {
     },
   );
   if (response.statusCode == 200) {
-    //save token here
+    const storage = FlutterSecureStorage();
+    final res = jsonDecode(response.body);
+    await storage.write(key: "token", value: res["token"]);
     return true;
   } else {
     print(response.statusCode);
