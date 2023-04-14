@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
@@ -36,27 +35,9 @@ Future<bool> uploadStudents(
 
   var res = await req.send();
   if (res.statusCode == 200) {
-    // Fluttertoast.showToast(
-    //   msg: "Roll List Uploaded Successfully",
-    //   toastLength: Toast.LENGTH_SHORT,
-    //   gravity: ToastGravity.BOTTOM,
-    //   timeInSecForIosWeb: 1,
-    //   backgroundColor: Colors.blue,
-    //   textColor: Colors.white,
-    //   fontSize: 16.0,
-    // );
     return true;
   } else {
     print(res.statusCode);
     return false;
-    // Fluttertoast.showToast(
-    //   msg: "Error in uploading rollList",
-    //   toastLength: Toast.LENGTH_SHORT,
-    //   gravity: ToastGravity.BOTTOM,
-    //   timeInSecForIosWeb: 1,
-    //   backgroundColor: Colors.red,
-    //   textColor: Colors.white,
-    //   fontSize: 16.0,
-    // );
   }
 }

@@ -1,14 +1,14 @@
 import 'dart:convert';
 
+import 'package:attendenceapp/Models/stats.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../Models/student.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Styles/url.dart';
 
-Future<StudentModel?> getMyProfileStudent() async {
-  final url = Uri.parse("$serverURL/students/myprofile");
+Future<List<StatsModel>?> getStats(String monthYear) async {
+  final url = Uri.parse("$serverURL/students/myattendance/$monthYear");
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: "token");
   if (token == null) {
@@ -19,9 +19,11 @@ Future<StudentModel?> getMyProfileStudent() async {
     "authorization": token,
   });
   if (response.statusCode == 200) {
-    return StudentModel.fromJson(jsonDecode(response.body));
+    final res = jsonDecode(response.body);
+    final Map<String, dynamic> resMap = res["Attendance"];
+    return List<StatsModel>.from(resMap.entries.map((e) => StatsModel.fromJson(e.key, e.value)));
   } else {
     print(response.statusCode);
-    return null;
+    return [];
   }
 }
