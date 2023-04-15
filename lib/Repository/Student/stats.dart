@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:attendenceapp/Models/stats.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -22,8 +23,11 @@ Future<List<StatsModel>?> getStats(String monthYear) async {
   if (response.statusCode == 200) {
     final res = jsonDecode(response.body);
     final Map<String, dynamic> resMap = res["Attendance"];
-    return List<StatsModel>.from(
-        resMap.entries.map((e) => StatsModel.fromJson(e.key, e.value)));
+    final int month = res["month"];
+    final int year = res["year"];
+    return List<StatsModel>.from(resMap.entries.map(
+      (e) => StatsModel.fromJson(e.key, e.value, month, year),
+    ));
   } else {
     print(response.statusCode);
     return [];
