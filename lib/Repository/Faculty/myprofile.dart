@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../Models/faculty.dart';
 import 'package:http/http.dart' as http;
 
-Future<FacultyModel?> getMyProfileFaculty()async {
+Future<FacultyModel?> getMyProfileFaculty() async {
   final url = Uri.parse("$serverURL/faculty/myprofile");
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: "token");
@@ -15,10 +15,10 @@ Future<FacultyModel?> getMyProfileFaculty()async {
     return null;
   }
   final response = await http.get(url, headers: {
-    "Authentication": token,
+    "authorization": token,
   });
   if (response.statusCode == 200) {
-    return FacultyModel.fromJson(jsonDecode(response.body));
+    return FacultyModel.fromJson(jsonDecode(response.body)["faculty"]);
   } else {
     print(response.statusCode);
     return null;

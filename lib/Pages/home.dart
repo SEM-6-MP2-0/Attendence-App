@@ -70,15 +70,7 @@ class _HomePageState extends State<HomePage> {
         return <Widget>[
           StartAttendancePage(),
           UploadStudents(),
-          FacultyProfilePage(
-            faculty: FacultyModel(
-              id: "id",
-              name: "Aman",
-              email: "Aman@gmail.com",
-              department: "IT",
-              phone: "09034993048",
-            ),
-          ),
+          FacultyProfilePage(),
         ];
       case Users.student:
         return <Widget>[
