@@ -8,7 +8,6 @@ class StudentModel {
   String dateofjoining;
   String dateofleaving;
   String department;
-  List<AttendanceModel> attendance;
 
   StudentModel({
     required this.id,
@@ -18,7 +17,6 @@ class StudentModel {
     required this.dateofjoining,
     required this.dateofleaving,
     required this.department,
-    required this.attendance,
   });
 
   factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
@@ -29,7 +27,5 @@ class StudentModel {
         dateofjoining: json["dateofjoining"],
         dateofleaving: json["dateofleaving"],
         department: json["department"],
-        attendance: List<AttendanceModel>.from(
-            json["attendance"].map((x) => AttendanceModel.fromJson(x))),
       );
 }

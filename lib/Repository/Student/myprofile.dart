@@ -19,7 +19,7 @@ Future<StudentModel?> getMyProfileStudent() async {
     "authorization": token,
   });
   if (response.statusCode == 200) {
-    return StudentModel.fromJson(jsonDecode(response.body));
+    return StudentModel.fromJson(jsonDecode(response.body)["student"]);
   } else {
     print(response.statusCode);
     return null;

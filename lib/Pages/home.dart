@@ -1,11 +1,16 @@
+import 'package:attendenceapp/Models/attendance.dart';
+import 'package:attendenceapp/Models/faculty.dart';
+import 'package:attendenceapp/Pages/facultyprofile.dart';
 import 'package:attendenceapp/Pages/startattendance.dart';
 import 'package:attendenceapp/Pages/stats.dart';
+import 'package:attendenceapp/Pages/studentProfile.dart';
 import 'package:attendenceapp/Pages/uploadstudents.dart';
 import 'package:attendenceapp/Provider/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Enum/users.dart';
+import '../Models/student.dart';
 import '../Styles/colors.dart';
 import '../Styles/textstyles.dart';
 import 'attendance.dart';
@@ -62,21 +67,23 @@ class _HomePageState extends State<HomePage> {
     final user = Provider.of<UserProvider>(context).user;
     switch (user) {
       case Users.faculty:
-        return const <Widget>[
+        return <Widget>[
           StartAttendancePage(),
           UploadStudents(),
-          Text(
-            'Profile',
-            style: CusTextStyle.big,
+          FacultyProfilePage(
+            faculty: FacultyModel(
+              id: "id",
+              name: "Aman",
+              email: "Aman@gmail.com",
+              department: "IT",
+              phone: "09034993048",
+            ),
           ),
         ];
       case Users.student:
-        return const <Widget>[
+        return <Widget>[
           StatsPage(),
-          Text(
-            'Profile',
-            style: CusTextStyle.big,
-          ),
+          StudentProfilePage(),
         ];
     }
   }
