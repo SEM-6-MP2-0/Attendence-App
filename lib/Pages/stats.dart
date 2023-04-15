@@ -1,20 +1,145 @@
 import 'package:attendenceapp/Models/stats.dart';
+import 'package:attendenceapp/Repository/Student/stats.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../statlist.dart';
 
-class StatsPage extends StatelessWidget {
+class StatsPage extends StatefulWidget {
   const StatsPage({super.key});
 
+  @override
+  State<StatsPage> createState() => _StatsPageState();
+}
+
+class _StatsPageState extends State<StatsPage> {
+  int curMonth = DateTime.now().month;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Attendance")),
-      body: ListView.builder(
-        itemBuilder: (context, index) => StatsTile(stat: statslist[index]),
-        itemCount: statslist.length,
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            height: 50,
+            decoration: BoxDecoration(
+                // color: Colors.grey.withOpacity(0.2),
+                ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    //gp to previous month
+                    setState(() {
+                      if (curMonth > 1) {
+                        curMonth--;
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "No data for Previous year");
+                      }
+                    });
+                  },
+                  icon: Icon(Icons.arrow_back_ios),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "${_getMonth(curMonth)} 2021",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (curMonth < DateTime.now().month) {
+                        curMonth++;
+                      } else {
+                        Fluttertoast.showToast(msg: "Cant predict future");
+                      }
+                    });
+                  },
+                  icon: Icon(Icons.arrow_forward_ios),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<StatsModel>?>(
+                future: getStats(
+                    "${_formatMonth(curMonth)}/${DateTime.now().year.toString()}"),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
+                    );
+                  }
+                  return snapshot.data!.isNotEmpty
+                      ? ListView.builder(
+                          itemBuilder: (context, index) =>
+                              StatsTile(stat: statslist[index]),
+                          itemCount: statslist.length,
+                        )
+                      : Center(
+                          child: Text("No data for this month"),
+                        );
+                }),
+          ),
+        ],
       ),
     );
+  }
+
+  String _formatMonth(int monthNum) {
+    if (monthNum < 1 || monthNum > 12) {
+      return "Invalid month number";
+    }
+    String monthStr = monthNum.toString();
+    if (monthNum < 10) {
+      monthStr = "0$monthStr";
+    }
+    return monthStr;
+  }
+
+  String _getMonth(int monthNum) {
+    switch (monthNum) {
+      case 1:
+        return "January";
+      case 2:
+        return "February";
+      case 3:
+        return "March";
+      case 4:
+        return "April";
+      case 5:
+        return "May";
+      case 6:
+        return "June";
+      case 7:
+        return "July";
+      case 8:
+        return "August";
+      case 9:
+        return "September";
+      case 10:
+        return "October";
+      case 11:
+        return "November";
+      case 12:
+        return "December";
+      default:
+        return "Invalid month number";
+    }
   }
 }
 
@@ -51,12 +176,14 @@ class StatsTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Row(
                       children: [
-                        Text(
+                        const Text(
                           "Present: ",
                           style: TextStyle(
-                              color: Colors.green, fontWeight: FontWeight.bold),
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Expanded(
