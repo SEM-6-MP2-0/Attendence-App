@@ -87,8 +87,8 @@ class _StatsPageState extends State<StatsPage> {
                   return snapshot.data!.isNotEmpty
                       ? ListView.builder(
                           itemBuilder: (context, index) =>
-                              StatsTile(stat: statslist[index]),
-                          itemCount: statslist.length,
+                              StatsTile(stat: snapshot.data![index]),
+                          itemCount: snapshot.data!.length,
                         )
                       : Center(
                           child: Text("No data for this month"),
@@ -146,7 +146,6 @@ class _StatsPageState extends State<StatsPage> {
 class StatsTile extends StatelessWidget {
   const StatsTile({super.key, required this.stat});
   final StatsModel stat;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -167,7 +166,9 @@ class StatsTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.lightBlueAccent.withOpacity(0.6),
               ),
-              child: Center(child: Text(stat.date)),
+              child: Center(
+                  child:
+                      Text(stat.date.toString() + "/" + stat.month.toString())),
             ),
             Expanded(
               child: Column(
