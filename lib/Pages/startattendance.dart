@@ -21,11 +21,27 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
   late String formatteddate;
   final String _dateFormat = 'hh:mm a \n EEE d MMM';
 
+  int getEndYear(String year) {
+    int curYear = DateTime.now().year;
+
+    switch (year) {
+      case "FE":
+        return curYear + 3;
+      case "SE":
+        return curYear + 2;
+      case "TE":
+        return curYear + 1;
+      case "BE":
+        return curYear;
+      default:
+        return curYear;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    year = List.generate(4, (index) => (curYear + index));
-    _yearController = year[0];
+    _yearController = getEndYear(year[0]);
     _branchController = branches[0];
     formatteddate = DateFormat(_dateFormat).format(DateTime.now());
     timer = Timer.periodic(
@@ -58,7 +74,12 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
 
   final curYear = DateTime.now().year;
 
-  late List<int> year;
+  final List<String> year = [
+    "FE",
+    "SE",
+    "TE",
+    "BE",
+  ];
 
   late String _branchController;
   late int _yearController;
@@ -115,10 +136,10 @@ class _StartAttendancePageState extends State<StartAttendancePage> {
                       child: DropdownButton<int>(
                         borderRadius: BorderRadius.circular(10),
                         value: _yearController,
-                        items: year.map((int value) {
+                        items: year.map((String value) {
                           return DropdownMenuItem<int>(
-                            value: value,
-                            child: Text(value.toString()),
+                            value: getEndYear(value),
+                            child: Text(value),
                           );
                         }).toList(),
                         onChanged: (int? cur) {

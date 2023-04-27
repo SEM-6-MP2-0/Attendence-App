@@ -46,7 +46,7 @@ class _StatsPageState extends State<StatsPage> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      "${_getMonth(curMonth)} 2021",
+                      "${_getMonth(curMonth)} ${DateTime.now().year.toString()}",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

@@ -44,26 +44,26 @@ class FacultyProfilePage extends StatelessWidget {
                   ),
                 ),
                 SafeArea(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Text(
-                        faculty.name,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: 'Montserrat',
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          faculty.name,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.black.withOpacity(0.1),
-                      ),
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: Card(
+                        const SizedBox(height: 10),
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.black.withOpacity(0.1),
+                        ),
+                        const SizedBox(height: 20),
+                        Card(
                           margin: const EdgeInsets.all(0),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
@@ -121,8 +121,8 @@ class FacultyProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
